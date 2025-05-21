@@ -7,8 +7,8 @@
     Body it takes : {"url": "long_url"}
     TEST : curl -k http://localhost/shorturl -d '{"url":"http://www.youtube.com"}'
 
-### Redirect
-   http://{{HOST}}/redirect
+### redirect
+    http://{{HOST}}/redirect
     Moto : To use a tinyUrl (8 char long) to redirect back a long URL.
     Method : POST
     Body it takes : {"url": "short_url"}
