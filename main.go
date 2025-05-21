@@ -29,6 +29,11 @@ func (url *URL) GetUrl() string {
 	return url.Url
 }
 
+func demo(w http.ResponseWriter, r *http.Request) {
+
+	http.Redirect(w, r, "longUrl", http.StatusSeeOther)
+}
+
 func redirect(w http.ResponseWriter, r *http.Request) {
 
 	// Step 0.0 CHECK ALLOWED METHODS
@@ -98,22 +103,14 @@ func shortUrl(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// DEBUG : SHAN
-
-	// longurl := url.GetLong()
-
-	// Hash the long to short url
 	hash := md5.Sum([]byte(url.Url))
 
 	shortUrl := URL{hex.EncodeToString(hash[:])[:8]}
-
 	// Check Colllision and regenerate if required - TBD
 
 	// Persist in the DB or IN-MEM STORE
 	memstore[shortUrl.Url] = url.Url
 
-	// fmt.Println("Memory Store: %+v", memstore)
-	// SEND URL
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(shortUrl)
 }
@@ -128,8 +125,12 @@ func main() {
 	http.HandleFunc("/shorturl", shortUrl)
 	http.HandleFunc("/redirect", redirect)
 
-	go http.ListenAndServe(":80", nil)
+	// API Docs
+	ui := http.FileServer(http.Dir("./ui"))
+	http.Handle("/", ui)
 
+	// Server stsrt
+	go http.ListenAndServe(":80", nil)
 	fmt.Println("Press <Enter> to stop")
 	fmt.Scanln()
 }
