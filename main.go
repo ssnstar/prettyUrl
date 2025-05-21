@@ -46,18 +46,13 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&url)
 	if err != nil {
-		// DEBUG : fmt.Fprintf(w, err.Error(), url)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	// Step 1: Get Url
-
-	fmt.Println("Memory Store: %+v", memstore)
 	longUrl, ok := memstore[url.Url]
 
-	fmt.Println("Short URL: %+v", url)
-	fmt.Println("Long URL: %+v", longUrl)
 	if !ok {
 		// 404
 		http.Error(w, "Not Found", http.StatusNotFound)
@@ -104,7 +99,6 @@ func shortUrl(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// DEBUG : SHAN
-	// fmt.Fprintf(w, "URL: %+v", url)
 
 	// longurl := url.GetLong()
 
@@ -118,7 +112,7 @@ func shortUrl(w http.ResponseWriter, r *http.Request) {
 	// Persist in the DB or IN-MEM STORE
 	memstore[shortUrl.Url] = url.Url
 
-	fmt.Println("Memory Store: %+v", memstore)
+	// fmt.Println("Memory Store: %+v", memstore)
 	// SEND URL
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(shortUrl)
@@ -126,9 +120,9 @@ func shortUrl(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	// INIT
-
+	// INIT store and cache
 	memstore = make(map[string]string)
+
 	// ADD ROUTES
 	// TBD :  MUX or GIN if need more flex.
 	http.HandleFunc("/shorturl", shortUrl)
