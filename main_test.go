@@ -7,11 +7,21 @@ import (
 	"github.com/steinfletcher/apitest"
 )
 
+func TestShortUrlGet(t *testing.T) {
+
+	apitest.New(). // configuration
+			HandlerFunc(shortUrl).
+			Get("/shorturl").
+			Expect(t).
+			Status(http.StatusMethodNotAllowed).
+			End()
+}
+
 func TestShortUrlFail(t *testing.T) {
 
 	apitest.New(). // configuration
 			HandlerFunc(shortUrl).
-			Post("http://localhost/shorturl").
+			Post("/shorturl").
 			Expect(t).
 			Status(http.StatusBadRequest).
 			End()
@@ -21,18 +31,29 @@ func TestShortUrlOk(t *testing.T) {
 
 	apitest.New(). // configuration
 			HandlerFunc(shortUrl).
-			Post("http://localhost/shorturl").
+			Post("/shorturl").
 			Expect(t).
 			Status(http.StatusOK).
 			End()
 }
-func TestRedirect(t *testing.T) {
+func TestRedirectPost(t *testing.T) {
 
 	apitest.New(). // configuration
-			HandlerFunc(shortUrl).
-			Get("http://localhost/redirect").
+			HandlerFunc(redirect).
+			Post("/redirect").
 			ContentType("application/json").
 			Expect(t).
 			Status(http.StatusSeeOther).
+			End()
+}
+
+func TestRedirectGet(t *testing.T) {
+
+	apitest.New(). // configuration
+			HandlerFunc(redirect).
+			Get("/redirect").
+			ContentType("application/json").
+			Expect(t).
+			Status(http.StatusMethodNotAllowed).
 			End()
 }
