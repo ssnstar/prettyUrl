@@ -32,6 +32,8 @@ func TestShortUrlOk(t *testing.T) {
 	apitest.New(). // configuration
 			HandlerFunc(shortUrl).
 			Post("/shorturl").
+			Body(`{"url": "http://www.youtube.com"}`).
+			ContentType("application/json").
 			Expect(t).
 			Status(http.StatusOK).
 			End()
@@ -41,6 +43,7 @@ func TestRedirectPost(t *testing.T) {
 	apitest.New(). // configuration
 			HandlerFunc(redirect).
 			Post("/redirect").
+			Body(`{"url": "e62e2446"}`).
 			ContentType("application/json").
 			Expect(t).
 			Status(http.StatusSeeOther).
