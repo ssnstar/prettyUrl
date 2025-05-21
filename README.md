@@ -1,18 +1,18 @@
 ### Prettyurl is a url shortner that exposes following APIs
 
 ### shorturl
-   http://{{HOST}}/shorturl 
-   Moto : To create a tinyUrl (8 char long) from a long URL. 
-   Method : POST
-   Body it takes : {"url": "long_url"}
-   TEST : curl -k http://localhost/shorturl -d '{"url":"http://www.youtube.com"}'
+    http://{{HOST}}/shorturl 
+    Moto : To create a tinyUrl (8 char long) from a long URL. 
+    Method : POST
+    Body it takes : {"url": "long_url"}
+    TEST : curl -k http://localhost/shorturl -d '{"url":"http://www.youtube.com"}'
 
 ### Redirect
    http://{{HOST}}/redirect
-   Moto : To use a tinyUrl (8 char long) to redirect back a long URL.
-   Method : POST
-   Body it takes : {"url": "short_url"}
-   TEST : curl -k http://localhost/shorturl -d '{"url":"http://www.youtube.com"}'
+    Moto : To use a tinyUrl (8 char long) to redirect back a long URL.
+    Method : POST
+    Body it takes : {"url": "short_url"}
+    TEST : curl -k http://localhost/shorturl -d '{"url":"http://www.youtube.com"}'
 
 ## Assumptions : 
     Short URL length ( 8 – 10 ) + domain
