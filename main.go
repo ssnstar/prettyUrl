@@ -69,6 +69,10 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	// Step 4 : redirect to the
 	// s := r.Get
 	// Redirect
+	w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
+	w.Header().Set("Access-Control-Allow-Methods", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
+
 	w.Header().Set("Location", longUrl)
 	http.Redirect(w, r, longUrl, http.StatusSeeOther)
 }

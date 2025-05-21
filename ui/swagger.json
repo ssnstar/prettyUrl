@@ -16,7 +16,7 @@
   "paths": {
     "/shorturl": {
       "post": {
-        "summary": "Create a short URL fron long Url",
+        "summary": "Create a short URL from a valid long URL",
         "operationId": "createShortUrl",
         "parameters": [
           {
@@ -47,11 +47,9 @@
         "summary": "Redirects to specific long URl using the given short URL",
         "operationId": "redirect",
         "responses": {
-          "200": {
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/Url"
-            }
+          "303": {
+            "description": ""
+            
           }
         },
         "parameters": [
@@ -73,13 +71,13 @@
   },
   "definitions": { 
       "Url": {
-        "title": "URL dt for operations",
+        "title": "URL type for shorturl or redirect operations",
         "description": ".",
         "allOf": [
             {
             "type": "object",
             "properties": {
-                "Url": {
+                "url": {
                 "type": "string",
                 "description": "Url object."
                 }
