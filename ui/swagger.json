@@ -1,0 +1,91 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "PrettyUrl",
+    "version": "1.0"
+  },
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/shorturl": {
+      "post": {
+        "summary": "Create a short URL fron long Url",
+        "operationId": "createShortUrl",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Url"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Url"
+            }
+          }
+        },
+        "tags": [
+          "Generic"
+        ]
+      }
+    },
+    "/redirect": {
+      "post": {
+        "summary": "Redirects to specific long URl using the given short URL",
+        "operationId": "redirect",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Url"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Url"
+            }
+          }
+        ],
+        "tags": [
+          "Generic"
+        ]
+      }
+    }
+  },
+  "definitions": { 
+      "Url": {
+        "title": "URL dt for operations",
+        "description": ".",
+        "allOf": [
+            {
+            "type": "object",
+            "properties": {
+                "Url": {
+                "type": "string",
+                "description": "Url object."
+                }
+            }
+            }
+        ]
+    }
+  }
+}
