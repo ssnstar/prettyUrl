@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	url1 "net/url"
@@ -69,11 +70,10 @@ func redirect(w http.ResponseWriter, r *http.Request) {
 	// Step 4 : redirect to the
 	// s := r.Get
 	// Redirect
-	w.Header().Set("Access-Control-Allow-Origin", r.Header.Get("Origin"))
-	w.Header().Set("Access-Control-Allow-Methods", "*")
-	w.Header().Set("Access-Control-Allow-Headers", "*")
+	// w.Header().Set("Access-Control-Allow-Origin", "*")
+	// w.Header().Set("Access-Control-Allow-Methods", "*")
 
-	w.Header().Set("Location", longUrl)
+	// w.Header().Set("Location", longUrl)
 	http.Redirect(w, r, longUrl, http.StatusSeeOther)
 }
 
@@ -119,6 +119,10 @@ func shortUrl(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(shortUrl)
 }
 
+func rerouteHttpToHttps(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "https://localhost:443"+r.RequestURI, http.StatusMovedPermanently)
+}
+
 func main() {
 
 	// INIT store and cache
@@ -133,8 +137,19 @@ func main() {
 	ui := http.FileServer(http.Dir("./ui"))
 	http.Handle("/", ui)
 
-	// Server stsrt
-	go http.ListenAndServe(":80", nil)
+	// Server on 443
+	go func() {
+		if err := http.ListenAndServeTLS(":443", "server.crt", "server.key", nil); err != nil {
+			log.Fatalf("ListenAndServe error: %v", err)
+		}
+	}()
+	// Start the Server on 80 and redirect to 443-HTTPs
+	go func() {
+		if err := http.ListenAndServe(":80", http.HandlerFunc(rerouteHttpToHttps)); err != nil {
+			log.Fatalf("ListenAndServe error: %v", err)
+		}
+	}()
+
 	fmt.Println("Press <Enter> to stop")
 	fmt.Scanln()
 }

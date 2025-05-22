@@ -1,0 +1,26 @@
+services:
+
+  backend:
+    image: prettyurl:shan
+    volumes:
+      - data:/etc/data
+    ports:
+      - "443:443"
+      - "80:80"
+    networks:
+      - front-tier
+      - back-tier
+    stdin_open: true
+    tty: true
+volumes:
+  data:
+    driver: local
+
+configs:
+  httpd-config:
+    external: true
+
+networks:
+  # The presence of these objects is sufficient to define them
+  front-tier: {}
+  back-tier: {}
